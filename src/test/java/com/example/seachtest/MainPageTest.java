@@ -45,18 +45,31 @@ public class MainPageTest {
         searchField.submit();
         WebElement searchPageField = driver.findElement(By.cssSelector("#sb_form_q"));
         assertEquals("Selenium", searchPageField.getAttribute("value"));
+    }
+
+    @Test
+    public void searchUrl() {
+        search();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
         wait.until(ExpectedConditions.and(
                 ExpectedConditions.attributeContains(By.cssSelector("h2 > a[href]"), "href", "selenium"),
                 ExpectedConditions.elementToBeClickable(By.cssSelector("h2 > a[href]"))
         ));
         List<WebElement> results = driver.findElements(By.cssSelector("h2>a[href]"));
-        clickElement(results,0);
+        clickElement(results, 0);
+        assertEquals("https://www.selenium.dev/", getTabUrl(), "не корректный переход по ссылке");
     }
-    private void clickElement(List<WebElement> results,int num) {
-      results.get(num).click();
-      String url= driver.getCurrentUrl();
-      System.out.println(url);
-     assertEquals("https://www.selenium.dev/",url);
+
+    private void clickElement(List<WebElement> results, int num) {
+        results.get(num).click();
+        System.out.println("Кликнули по ссылке" + " " + num);
+    }
+
+    private String getTabUrl() {
+        ArrayList tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1).toString());
+        String url = driver.getCurrentUrl();
+        System.out.println(url);
+        return url;
     }
 }

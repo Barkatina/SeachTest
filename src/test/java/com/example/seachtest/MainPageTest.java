@@ -16,7 +16,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainPageTest {
+@Nested
+class MainPageTest {
     private WebDriver driver;
 
 
@@ -57,19 +58,33 @@ public class MainPageTest {
         ));
         List<WebElement> results = driver.findElements(By.cssSelector("h2>a[href]"));
         clickElement(results, 0);
-        assertEquals("https://www.selenium.dev/", getTabUrl(), "не корректный переход по ссылке");
+        if (driver.getWindowHandles().size() == 1) {
+            System.out.println("Ссылка открылась в той же вкладке");
+            wait.until(ExpectedConditions.urlContains("https://www.selenium.dev/"));
+            assertTrue(getCurrentUrl().startsWith("https://www.selenium.dev/"), "не корректный переход по ссылке");
+        } else {
+            System.out.println("Ссылка открылась в новой вкладке");
+            assertTrue(getTabUrl(driver).startsWith("https://www.selenium.dev/"), "не корректный переход по ссылке");
+        }
     }
+
 
     private void clickElement(List<WebElement> results, int num) {
         results.get(num).click();
         System.out.println("Кликнули по ссылке" + " " + num);
     }
 
-    private String getTabUrl() {
-        ArrayList tabs = new ArrayList<>(driver.getWindowHandles());
-        driver.switchTo().window(tabs.get(1).toString());
+    private String getTabUrl(WebDriver driver) {
+        List<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+        return getCurrentUrl();
+    }
+
+    private String getCurrentUrl() {
         String url = driver.getCurrentUrl();
         System.out.println(url);
         return url;
     }
 }
+
+

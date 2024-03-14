@@ -1,5 +1,7 @@
-package com.example.seachtest;
+package com.example.seachtest.tests;
 
+import com.example.seachtest.pages.MainPage;
+import com.example.seachtest.pages.ResultsPage;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Nested
-class MainPageTest {
+class BingSearchTest {
     private WebDriver driver;
 
 
@@ -39,25 +41,22 @@ class MainPageTest {
     }
 
     @Test
-    public void search() {
+    public void searchFieldTest() {
         String input = "Selenium";
-        WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
-        searchField.sendKeys(input);
-        searchField.submit();
-        WebElement searchPageField = driver.findElement(By.cssSelector("#sb_form_q"));
-        assertEquals("Selenium", searchPageField.getAttribute("value"));
+        MainPage mp = new MainPage(driver);
+        mp.setText(input);
+        ResultsPage rp = new ResultsPage(driver);
+        assertEquals(input, rp.getTextFromSearchField(), "Текст не совпал");
     }
 
     @Test
-    public void searchUrl() {
-        search();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
-        wait.until(ExpectedConditions.and(
-                ExpectedConditions.attributeContains(By.cssSelector("h2 > a[href]"), "href", "selenium"),
-                ExpectedConditions.elementToBeClickable(By.cssSelector("h2 > a[href]"))
-        ));
-        List<WebElement> results = driver.findElements(By.cssSelector("h2>a[href]"));
-        clickElement(results, 0);
+    public void searchResultTest() {
+        String input = "Selenium";
+        MainPage mp = new MainPage(driver);
+        mp.setText(input);
+        ResultsPage rp = new ResultsPage(driver);
+        rp.clickElement(0);
+        rp.findByCss("h2>a[href]", Duration.ofSeconds(6));
         if (driver.getWindowHandles().size() == 1) {
             System.out.println("Ссылка открылась в той же вкладке");
             wait.until(ExpectedConditions.urlContains("https://www.selenium.dev/"));
@@ -66,12 +65,6 @@ class MainPageTest {
             System.out.println("Ссылка открылась в новой вкладке");
             assertTrue(getTabUrl(driver).startsWith("https://www.selenium.dev/"), "не корректный переход по ссылке");
         }
-    }
-
-
-    private void clickElement(List<WebElement> results, int num) {
-        results.get(num).click();
-        System.out.println("Кликнули по ссылке" + " " + num);
     }
 
     private String getTabUrl(WebDriver driver) {

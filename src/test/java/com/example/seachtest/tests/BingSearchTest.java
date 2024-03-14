@@ -59,7 +59,7 @@ class BingSearchTest {
         rp.findByCss("h2>a[href]", Duration.ofSeconds(6));
         if (driver.getWindowHandles().size() == 1) {
             System.out.println("Ссылка открылась в той же вкладке");
-            wait.until(ExpectedConditions.urlContains("https://www.selenium.dev/"));
+            rp.waits (6).until(ExpectedConditions.urlContains("https://www.selenium.dev/"));
             assertTrue(getCurrentUrl().startsWith("https://www.selenium.dev/"), "не корректный переход по ссылке");
         } else {
             System.out.println("Ссылка открылась в новой вкладке");

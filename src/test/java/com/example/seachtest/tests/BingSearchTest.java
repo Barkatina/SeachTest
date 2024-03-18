@@ -2,21 +2,21 @@ package com.example.seachtest.tests;
 
 import com.example.seachtest.pages.MainPage;
 import com.example.seachtest.pages.ResultsPage;
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.openqa.selenium.By;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Nested
 class BingSearchTest {
@@ -32,7 +32,6 @@ class BingSearchTest {
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get("https://www2.bing.com/");
-
     }
 
     @AfterEach
@@ -58,7 +57,7 @@ class BingSearchTest {
         rp.clickElement(0);
         if (driver.getWindowHandles().size() == 1) {
             System.out.println("Ссылка открылась в той же вкладке");
-            rp.wait (6).until(ExpectedConditions.urlContains("https://www.selenium.dev/"));
+            rp.getWait().until(ExpectedConditions.urlContains("https://www.selenium.dev/"));
             assertTrue(getCurrentUrl().startsWith("https://www.selenium.dev/"), "не корректный переход по ссылке");
         } else {
             System.out.println("Ссылка открылась в новой вкладке");

@@ -4,9 +4,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.PageFactoryFinder;
-
-import java.lang.foreign.SymbolLookup;
 
 // "https://www2.bing.com/"
 public class MainPage {
@@ -19,6 +16,7 @@ public class MainPage {
         System.out.println("Введен текст:" + text);
 
     }
+
     public MainPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }

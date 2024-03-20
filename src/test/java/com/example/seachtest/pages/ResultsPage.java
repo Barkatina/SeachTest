@@ -17,7 +17,6 @@ public class ResultsPage {
     @FindBy(css = "h2>a[href]")
     private List<WebElement> results;
 
-    @FindBy(css = "h2>a[href]")
     private WebDriverWait wait;
 
     public void clickElement(int num) {
